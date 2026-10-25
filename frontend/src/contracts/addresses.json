@@ -1,0 +1,7 @@
+{
+  "network": "botChainTestnet",
+  "chainId": 968,
+  "tokenLocker": "0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52",
+  "mockToken": "0xBb6987f6981B31BE9e76829A6eBCa743634b8094",
+  "deployedAt": "2026-10-25T16:26:46.206Z"
+}
