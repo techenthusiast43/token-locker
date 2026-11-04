@@ -35,6 +35,21 @@ const config: HardhatUserConfig = {
     cache: "./cache",
     artifacts: "./artifacts",
   },
+  etherscan: {
+    apiKey: {
+      botChainTestnet: "abc",
+    },
+    customChains: [
+      {
+        network: "botChainTestnet",
+        chainId: 968,
+        urls: {
+          apiURL: "https://scan.bohr.life/api",
+          browserURL: "https://scan.bohr.life",
+        },
+      },
+    ],
+  },
 };
 
 export default config;
