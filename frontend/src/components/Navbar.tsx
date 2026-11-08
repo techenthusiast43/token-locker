@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import { Lock, ExternalLink, RefreshCw, Globe } from 'lucide-react';
+import { Lock, ExternalLink, RefreshCw } from 'lucide-react';
 import { botChainMainnet, hardhatLocal, getExplorerUrl } from '../config/wagmi';
 
 interface NavbarProps {
@@ -108,15 +108,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <appkit-button balance="show" size="md" />
           </div>
 
-          {/* BOT Chain Website Link */}
+          {/* BOT Chain Website Link with Official Logo */}
           <a
             href="https://botchain.ai"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex p-2.5 rounded-xl text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] hover:bg-[rgba(255,255,255,0.08)] transition-all"
+            className="hidden sm:inline-flex items-center p-2 rounded-xl text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] hover:bg-[rgba(255,255,255,0.08)] transition-all"
             title="Open BOT Chain Website (https://botchain.ai)"
           >
-            <Globe className="w-4 h-4" />
+            <img src="/botchain-logo.png" alt="BOT Chain Logo" className="w-4 h-4 rounded-full object-contain shrink-0" />
           </a>
 
           {/* Explorer Link */}
