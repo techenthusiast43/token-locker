@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { WagmiProvider, useAccount, usePublicClient } from 'wagmi';
+import { WagmiProvider, useAccount, useChainId, usePublicClient } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { config, botChainMainnet, getExplorerUrl } from './config/wagmi';
+import { config, botChainMainnet, hardhatLocal, getExplorerUrl } from './config/wagmi';
 import { Navbar } from './components/Navbar';
 import { LockForm } from './components/LockForm';
 import { MyLocks } from './components/MyLocks';
@@ -24,12 +24,14 @@ function MainContent() {
   const [totalLocksCount, setTotalLocksCount] = useState<number>(0);
 
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const networkConfig = getAddresses();
+  const networkConfig = getAddresses(chainId);
   const tokenLockerAddress = networkConfig.tokenLocker;
-  const explorerUrl = getExplorerUrl();
+  const explorerUrl = getExplorerUrl(chainId);
   const rpcUrl = networkConfig.rpc;
+  const isLocal = chainId === hardhatLocal.id;
 
   // Fetch total locks count
   useEffect(() => {
@@ -136,27 +138,28 @@ function MainContent() {
           <div className="flex items-center gap-2">
             <span className="font-bold text-white">TokenLocker dApp</span>
             <span className="text-[var(--text-muted)]">•</span>
-            <span>Running on BOT Chain Mainnet (Chain ID 677)</span>
+            <span>
+              {isLocal ? 'Running on Hardhat Localhost (Chain ID 31337)' : 'Running on BOT Chain Mainnet (Chain ID 677)'}
+            </span>
           </div>
 
           <div className="flex items-center gap-6">
-            <a
-              href={rpcUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
-            >
-              RPC: https://rpc.botchain.ai
-            </a>
-            <a
-              href={explorerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-white transition-colors flex items-center gap-1"
-            >
-              <span>BotChain Explorer</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
+            <span className="text-slate-400">
+              RPC: {rpcUrl}
+            </span>
+            {explorerUrl ? (
+              <a
+                href={explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors flex items-center gap-1"
+              >
+                <span>BotChain Explorer</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <span className="text-[#00f2fe] font-mono text-[11px]">Local Dev Node</span>
+            )}
           </div>
         </div>
       </footer>

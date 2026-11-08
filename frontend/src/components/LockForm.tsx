@@ -29,11 +29,12 @@ interface LockFormProps {
 
 export const LockForm: React.FC<LockFormProps> = ({ onLockCreated }) => {
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const networkConfig = getAddresses();
+  const networkConfig = getAddresses(chainId);
   const tokenLockerAddress = networkConfig.tokenLocker;
-  const explorerUrl = getExplorerUrl();
+  const explorerUrl = getExplorerUrl(chainId);
 
   // Form State
   const [tokenAddressInput, setTokenAddressInput] = useState<string>('');

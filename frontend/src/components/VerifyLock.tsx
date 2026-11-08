@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePublicClient } from 'wagmi';
+import { usePublicClient, useChainId } from 'wagmi';
 import { formatUnits, isAddress } from 'viem';
 import {
   ShieldCheck,
@@ -27,11 +27,12 @@ interface VerifyLockProps {
 
 export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
   const publicClient = usePublicClient();
+  const chainId = useChainId();
 
-  const networkConfig = getAddresses();
+  const networkConfig = getAddresses(chainId);
   const tokenLockerAddress = networkConfig.tokenLocker;
-  const explorerUrl = getExplorerUrl();
-  const explorerName = 'BotChain Explorer';
+  const explorerUrl = getExplorerUrl(chainId);
+  const explorerName = chainId === 31337 ? 'Localhost' : 'BotChain Explorer';
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLock, setSelectedLock] = useState<LockRecord | null>(null);
@@ -206,7 +207,7 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
                   <span>On-Chain Verified</span>
                 </span>
                 <span className="badge badge-locked font-mono text-[11px]">
-                  BOT Chain Mainnet (677)
+                  {chainId === 31337 ? 'Localhost (31337)' : 'BOT Chain Mainnet (677)'}
                 </span>
               </div>
               <h3 className="text-2xl font-black text-white tracking-tight">

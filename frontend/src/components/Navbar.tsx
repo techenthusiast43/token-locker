@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { Lock, ExternalLink, RefreshCw } from 'lucide-react';
-import { botChainMainnet, getExplorerUrl } from '../config/wagmi';
+import { botChainMainnet, hardhatLocal, getExplorerUrl } from '../config/wagmi';
 
 interface NavbarProps {
   activeTab: 'create' | 'my-locks' | 'verify';
@@ -14,7 +14,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const { switchChain } = useSwitchChain();
 
   const isMainnet = chainId === botChainMainnet.id;
-  const explorerUrl = getExplorerUrl();
+  const isLocal = chainId === hardhatLocal.id;
+  const isCorrectChain = isMainnet || isLocal;
+  const explorerUrl = getExplorerUrl(chainId);
 
   return (
     <header className="w-full border-b border-[var(--border-subtle)] bg-[rgba(7,9,14,0.8)] backdrop-blur-md sticky top-0 z-50">
@@ -35,8 +37,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
                 TokenLocker
               </span>
-              <span className="badge badge-locked text-[10px] py-0.5 px-2">
-                MAINNET (677)
+              <span className={`badge ${isLocal ? 'badge-unlocked' : 'badge-locked'} text-[10px] py-0.5 px-2`}>
+                {isLocal ? 'LOCALHOST (31337)' : 'MAINNET (677)'}
               </span>
             </div>
             <p className="text-[11px] text-[var(--text-muted)] font-medium">
@@ -83,20 +85,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         <div className="flex items-center gap-3">
           
           {/* Network Switcher (if on unsupported chain) */}
-          {isConnected && !isMainnet && (
+          {isConnected && !isCorrectChain && (
             <button
               onClick={() => switchChain?.({ chainId: botChainMainnet.id })}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Switch to BOT Chain Mainnet</span>
+              <span>Switch to Mainnet</span>
             </button>
           )}
 
-          {isConnected && isMainnet && (
+          {isConnected && isCorrectChain && (
             <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[#10b981]/10 text-[#34d399] border border-[#10b981]/25">
               <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
-              <span>BOT Chain Mainnet</span>
+              <span>{isLocal ? 'Hardhat Localhost' : 'BOT Chain Mainnet'}</span>
             </div>
           )}
 

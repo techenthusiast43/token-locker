@@ -5,8 +5,8 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
-    "deploy:botchain": "hardhat run scripts/deploy.ts --network botChainTestnet",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy-localhost.ts --network localhost",
     "deploy:mainnet": "hardhat run scripts/deploy-mainnet.ts --network botChainMainnet"
   },
   "devDependencies": {

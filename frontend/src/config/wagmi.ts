@@ -25,13 +25,33 @@ export const botChainMainnet = defineChain({
   testnet: false,
 });
 
+// Define Local Hardhat Chain (Chain ID: 31337)
+export const hardhatLocal = defineChain({
+  id: 31337,
+  name: 'Hardhat Localhost',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'ETH',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['http://127.0.0.1:8545'],
+    },
+  },
+  testnet: true,
+});
+
 // Explorer helper
-export const getExplorerUrl = () => 'https://scan.botchain.ai';
+export const getExplorerUrl = (chainId?: number) => {
+  if (chainId === 31337) return '';
+  return 'https://scan.botchain.ai';
+};
 
 // Reown / WalletConnect Project ID
 export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || '39aa70f889eb69efc6ea7cd8c6488fff';
 
-export const networks = [botChainMainnet];
+export const networks = [botChainMainnet, hardhatLocal];
 
 // Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({
@@ -42,7 +62,7 @@ export const wagmiAdapter = new WagmiAdapter({
 // Initialize Reown AppKit Modal
 export const modal = createAppKit({
   adapters: [wagmiAdapter],
-  networks: [botChainMainnet],
+  networks: [botChainMainnet, hardhatLocal],
   defaultNetwork: botChainMainnet,
   projectId,
   metadata: {

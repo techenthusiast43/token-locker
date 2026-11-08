@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   useAccount,
+  useChainId,
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
@@ -33,11 +34,12 @@ interface MyLocksProps {
 
 export const MyLocks: React.FC<MyLocksProps> = ({ onNavigateToCreate, onOpenVerify }) => {
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const networkConfig = getAddresses();
+  const networkConfig = getAddresses(chainId);
   const tokenLockerAddress = networkConfig.tokenLocker;
-  const explorerUrl = getExplorerUrl();
+  const explorerUrl = getExplorerUrl(chainId);
 
   const [locks, setLocks] = useState<LockRecord[]>([]);
   const [tokenMeta, setTokenMeta] = useState<Record<string, { symbol: string; decimals: number }>>({});
