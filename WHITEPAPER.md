@@ -193,6 +193,17 @@ TokenLocker is engineered to operate on **BOT Chain** (Bohr Network), capitalizi
 
 ### 5.1 Deployment Specifications
 
+#### A. Production Mainnet
+| Parameter | Specification |
+| :--- | :--- |
+| **Network Name** | BOT Chain Mainnet |
+| **Chain ID** | `677` |
+| **Native Currency** | BOT (150 Million Total Supply) |
+| **RPC Endpoint** | `https://rpc.botchain.ai` |
+| **Block Explorer** | [https://scan.botchain.ai](https://scan.botchain.ai) |
+| **TokenLocker Core Contract** | [`0xcA7110690a29728998034f833eAFa5341D98bD5f`](https://scan.botchain.ai/address/0xcA7110690a29728998034f833eAFa5341D98bD5f) |
+
+#### B. Public Testnet
 | Parameter | Specification |
 | :--- | :--- |
 | **Network Name** | BOT Chain Testnet |
@@ -200,8 +211,8 @@ TokenLocker is engineered to operate on **BOT Chain** (Bohr Network), capitalizi
 | **Native Currency** | BOT |
 | **RPC Endpoint** | `https://rpc.bohr.life` |
 | **Block Explorer** | [https://scan.bohr.life/](https://scan.bohr.life/) |
-| **TokenLocker Core Contract** | `0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52` |
-| **MockERC20 Faucet Token** | `0xBb6987f6981B31BE9e76829A6eBCa743634b8094` |
+| **TokenLocker Core Contract** | [`0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52`](https://scan.bohr.life/address/0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52) |
+| **MockERC20 Faucet Token** | [`0xBb6987f6981B31BE9e76829A6eBCa743634b8094`](https://scan.bohr.life/address/0xBb6987f6981B31BE9e76829A6eBCa743634b8094) |
 
 ### 5.2 Economic Efficiency
 Because BOT Chain provides sub-cent transaction fees, creating micro-locks, vesting schedules, and periodic unlocks costs fractions of a penny. This eliminates the prohibitive \$20–\$80 transaction costs typical of Ethereum Mainnet locker platforms.

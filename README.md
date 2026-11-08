@@ -14,6 +14,7 @@ TokenLocker allows token holders, founders, and developers to lock tokens for a 
 - **Native Gas Token:** BOT
 - **Total Supply:** 150,000,000 BOT
 - **Block Explorer:** [https://scan.botchain.ai](https://scan.botchain.ai)
+- **TokenLocker Contract:** [`0xcA7110690a29728998034f833eAFa5341D98bD5f`](https://scan.botchain.ai/address/0xcA7110690a29728998034f833eAFa5341D98bD5f)
 
 ### 2. BOT Chain Testnet
 - **Chain ID:** `968`

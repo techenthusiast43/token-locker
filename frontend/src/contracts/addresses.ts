@@ -34,3 +34,4 @@ export function getAddresses(chainId?: number): ChainConfig {
   }
   return NETWORKS_CONFIG[677];
 }
+
