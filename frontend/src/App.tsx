@@ -14,6 +14,8 @@ import {
   Coins,
   ExternalLink,
   Layers,
+  Globe,
+  CheckCircle2,
 } from 'lucide-react';
 
 const queryClient = new QueryClient();
@@ -130,36 +132,192 @@ function MainContent() {
         {activeTab === 'verify' && (
           <VerifyLock initialLockId={selectedVerifyId} />
         )}
-      </main>
 
-      {/* Footer */}
-      <footer className="w-full border-t border-[var(--border-subtle)] bg-[rgba(5,7,12,0.9)] py-8 px-4 text-xs text-slate-400 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-white">TokenLocker dApp</span>
-            <span className="text-[var(--text-muted)]">•</span>
-            <span>
-              {isLocal ? 'Running on Hardhat Localhost (Chain ID 31337)' : 'Running on BOT Chain Mainnet (Chain ID 677)'}
-            </span>
-          </div>
+        {/* BOT Chain Ecosystem Showcase Section */}
+        <section className="glass-panel p-6 sm:p-8 rounded-2xl border border-[#00f2fe]/20 relative overflow-hidden bg-gradient-to-br from-[#00f2fe]/5 via-[#0a0f1d] to-[#8a2be2]/5 shadow-[0_0_30px_rgba(0,242,254,0.08)] mt-12">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#00f2fe]/5 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+          
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#00f2fe] to-[#4facfe] p-[1.5px] shadow-[0_0_25px_rgba(0,242,254,0.35)] shrink-0">
+                <div className="w-full h-full bg-[#0a0f1d] rounded-[14px] flex items-center justify-center">
+                  {/* BOT Chain Ecosystem Logo */}
+                  <svg className="w-7 h-7 text-[#00f2fe]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="10" rx="2" />
+                    <circle cx="12" cy="5" r="2" />
+                    <path d="M12 7v4" />
+                    <line x1="8" y1="16" x2="8" y2="16.01" />
+                    <line x1="16" y1="16" x2="16" y2="16.01" />
+                  </svg>
+                </div>
+              </div>
 
-          <div className="flex items-center gap-6">
-            <span className="text-slate-400">
-              RPC: {rpcUrl}
-            </span>
-            {explorerUrl ? (
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#00f2fe] bg-[#00f2fe]/10 px-2.5 py-0.5 rounded-full border border-[#00f2fe]/25">
+                    BOT Chain Ecosystem Showcase
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">Chain ID: 677</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  Built Natively for BOT Chain
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mt-1">
+                  TokenLocker provides trustless token vesting and liquidity locking infrastructure for builders and communities on BOT Chain.
+                </p>
+              </div>
+            </div>
+
+            {/* Official BOT Chain Ecosystem Links */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full lg:w-auto">
               <a
-                href={explorerUrl}
+                href="https://botchain.ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors flex items-center gap-1"
+                className="btn-secondary flex-1 sm:flex-initial py-3 px-5 text-xs font-semibold flex items-center justify-center gap-2 bg-[rgba(255,255,255,0.04)] hover:bg-[#00f2fe]/10 hover:border-[#00f2fe]/40 hover:text-[#00f2fe] transition-all rounded-xl"
               >
-                <span>BotChain Explorer</span>
-                <ExternalLink className="w-3 h-3" />
+                <Globe className="w-4 h-4 text-[#00f2fe]" />
+                <span>BOT Chain Website</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-60" />
               </a>
-            ) : (
-              <span className="text-[#00f2fe] font-mono text-[11px]">Local Dev Node</span>
-            )}
+
+              <a
+                href="https://scan.botchain.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary flex-1 sm:flex-initial py-3 px-5 text-xs font-semibold flex items-center justify-center gap-2 rounded-xl shadow-[0_0_20px_rgba(0,242,254,0.3)]"
+              >
+                <span>BOT Chain Explorer</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Comprehensive Ecosystem Footer */}
+      <footer className="w-full border-t border-[var(--border-subtle)] bg-[rgba(5,7,12,0.95)] pt-12 pb-8 px-4 text-xs text-slate-400 mt-12">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-[var(--border-subtle)]">
+            
+            {/* Col 1 & 2: Project & Network Identity */}
+            <div className="md:col-span-2 space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#00f2fe] to-[#4facfe] p-[1.5px] flex items-center justify-center">
+                  <div className="w-full h-full bg-[#0a0f1d] rounded-[7px] flex items-center justify-center">
+                    <Lock className="w-4 h-4 text-[#00f2fe]" />
+                  </div>
+                </div>
+                <span className="font-extrabold text-base tracking-tight text-white">
+                  TokenLocker
+                </span>
+                <span className="badge badge-locked text-[10px] py-0.5 px-2 font-semibold">
+                  BOT CHAIN
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)] max-w-sm leading-relaxed">
+                Decentralized, trustless, and non-custodial token locking & vesting protocol deployed natively on BOT Chain Mainnet.
+              </p>
+              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+                <span>
+                  {isLocal ? 'Running on Hardhat Localhost (Chain ID 31337)' : 'Live on BOT Chain Mainnet (Chain ID 677)'}
+                </span>
+              </div>
+            </div>
+
+            {/* Col 3: Official BOT Chain Links */}
+            <div className="space-y-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+                <span>BOT Chain Ecosystem</span>
+              </p>
+              <ul className="space-y-2 text-xs">
+                <li>
+                  <a
+                    href="https://botchain.ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#00f2fe] transition-colors flex items-center gap-2 group"
+                  >
+                    <Globe className="w-3.5 h-3.5 text-[#00f2fe] group-hover:scale-110 transition-transform" />
+                    <span>BOT Chain Website</span>
+                    <ExternalLink className="w-3 h-3 text-slate-400 ml-auto" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://scan.botchain.ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#00f2fe] transition-colors flex items-center gap-2 group"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-[#00f2fe] group-hover:scale-110 transition-transform" />
+                    <span>BOT Chain Explorer</span>
+                    <ExternalLink className="w-3 h-3 text-slate-400 ml-auto" />
+                  </a>
+                </li>
+                <li className="pt-1">
+                  <span className="text-[11px] text-slate-400 block font-mono">
+                    RPC: {rpcUrl}
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 4: Verified Contracts & Links */}
+            <div className="space-y-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-white">
+                Verified Contracts
+              </p>
+              <ul className="space-y-2 text-xs">
+                <li>
+                  <a
+                    href={`https://scan.botchain.ai/address/${tokenLockerAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#00f2fe] transition-colors flex items-center gap-1.5 font-mono"
+                  >
+                    <span>TokenLocker: {tokenLockerAddress.slice(0, 6)}...{tokenLockerAddress.slice(-4)}</span>
+                    <ExternalLink className="w-3 h-3 text-slate-400 ml-auto" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/techenthusiast43/token-locker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#00f2fe] transition-colors flex items-center gap-1.5"
+                  >
+                    <span>GitHub Open Source</span>
+                    <ExternalLink className="w-3 h-3 text-slate-400 ml-auto" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom strip */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+            <p>© {new Date().getFullYear()} TokenLocker. Open-source under MIT License. Non-custodial DeFi infrastructure on BOT Chain.</p>
+            <div className="flex items-center gap-4">
+              <a 
+                href="https://botchain.ai" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white underline transition-colors"
+              >
+                botchain.ai
+              </a>
+              <span>•</span>
+              <a 
+                href="https://scan.botchain.ai" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white underline transition-colors"
+              >
+                scan.botchain.ai
+              </a>
+            </div>
           </div>
         </div>
       </footer>

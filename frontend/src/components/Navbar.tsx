@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import { Lock, ExternalLink, RefreshCw } from 'lucide-react';
+import { Lock, ExternalLink, RefreshCw, Globe } from 'lucide-react';
 import { botChainMainnet, hardhatLocal, getExplorerUrl } from '../config/wagmi';
 
 interface NavbarProps {
@@ -108,13 +108,24 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <appkit-button balance="show" size="md" />
           </div>
 
+          {/* BOT Chain Website Link */}
+          <a
+            href="https://botchain.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex p-2.5 rounded-xl text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] hover:bg-[rgba(255,255,255,0.08)] transition-all"
+            title="Open BOT Chain Website (https://botchain.ai)"
+          >
+            <Globe className="w-4 h-4" />
+          </a>
+
           {/* Explorer Link */}
           <a
-            href={explorerUrl}
+            href={explorerUrl || 'https://scan.botchain.ai'}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] hover:bg-[rgba(255,255,255,0.08)] transition-all"
-            title={`Open BotChain Explorer (${explorerUrl})`}
+            title={`Open BotChain Explorer (${explorerUrl || 'https://scan.botchain.ai'})`}
           >
             <ExternalLink className="w-4 h-4" />
           </a>
