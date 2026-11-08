@@ -25,56 +25,13 @@ export const botChainMainnet = defineChain({
   testnet: false,
 });
 
-// Define BOT Chain Testnet (Chain ID: 968)
-export const botChainTestnet = defineChain({
-  id: 968,
-  name: 'BOT Chain Testnet',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'BOT',
-    symbol: 'BOT',
-  },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.bohr.life'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'BohrScan',
-      url: 'https://scan.bohr.life',
-    },
-  },
-  testnet: true,
-});
-
-// Local Hardhat Node Chain for rapid testing
-export const hardhatLocal = defineChain({
-  id: 31337,
-  name: 'Hardhat Localhost',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'ETH',
-    symbol: 'ETH',
-  },
-  rpcUrls: {
-    default: {
-      http: ['http://127.0.0.1:8545'],
-    },
-  },
-  testnet: true,
-});
-
 // Explorer helper
-export const getExplorerUrl = (chainId?: number) => {
-  if (chainId === 968) return 'https://scan.bohr.life';
-  return 'https://scan.botchain.ai';
-};
+export const getExplorerUrl = () => 'https://scan.botchain.ai';
 
-// Reown / WalletConnect Project ID (can be configured in .env or defaults to a working demo key)
+// Reown / WalletConnect Project ID
 export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || '39aa70f889eb69efc6ea7cd8c6488fff';
 
-export const networks = [botChainMainnet, botChainTestnet, hardhatLocal];
+export const networks = [botChainMainnet];
 
 // Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({
@@ -85,7 +42,7 @@ export const wagmiAdapter = new WagmiAdapter({
 // Initialize Reown AppKit Modal
 export const modal = createAppKit({
   adapters: [wagmiAdapter],
-  networks: [botChainMainnet, botChainTestnet, hardhatLocal],
+  networks: [botChainMainnet],
   defaultNetwork: botChainMainnet,
   projectId,
   metadata: {

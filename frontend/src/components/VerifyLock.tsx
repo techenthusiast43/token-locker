@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePublicClient, useChainId } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 import { formatUnits, isAddress } from 'viem';
 import {
   ShieldCheck,
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { TOKEN_LOCKER_ABI, ERC20_ABI } from '../contracts/abis';
 import { getAddresses } from '../contracts/addresses';
-import { getExplorerUrl, botChainTestnet } from '../config/wagmi';
+import { getExplorerUrl } from '../config/wagmi';
 import { LockRecord } from '../types';
 
 interface VerifyLockProps {
@@ -27,12 +27,11 @@ interface VerifyLockProps {
 
 export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
   const publicClient = usePublicClient();
-  const chainId = useChainId();
 
-  const networkConfig = getAddresses(chainId);
-  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
-  const explorerUrl = getExplorerUrl(chainId);
-  const explorerName = chainId === botChainTestnet.id ? 'BohrScan' : 'BotChain Explorer';
+  const networkConfig = getAddresses();
+  const tokenLockerAddress = networkConfig.tokenLocker;
+  const explorerUrl = getExplorerUrl();
+  const explorerName = 'BotChain Explorer';
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLock, setSelectedLock] = useState<LockRecord | null>(null);
@@ -207,7 +206,7 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
                   <span>On-Chain Verified</span>
                 </span>
                 <span className="badge badge-locked font-mono text-[11px]">
-                  BOT Chain (968)
+                  BOT Chain Mainnet (677)
                 </span>
               </div>
               <h3 className="text-2xl font-black text-white tracking-tight">

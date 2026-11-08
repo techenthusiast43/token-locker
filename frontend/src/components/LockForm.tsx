@@ -21,25 +21,22 @@ import {
 } from 'lucide-react';
 import { TOKEN_LOCKER_ABI, ERC20_ABI } from '../contracts/abis';
 import { getAddresses } from '../contracts/addresses';
-import { getExplorerUrl, botChainTestnet } from '../config/wagmi';
+import { getExplorerUrl } from '../config/wagmi';
 
 interface LockFormProps {
   onLockCreated?: (lockId: bigint) => void;
-  onOpenFaucet?: () => void;
 }
 
-export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet }) => {
+export const LockForm: React.FC<LockFormProps> = ({ onLockCreated }) => {
   const { address: userAddress, isConnected } = useAccount();
-  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const networkConfig = getAddresses(chainId);
-  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
-  const mockTokenAddress = networkConfig.mockToken || '';
-  const explorerUrl = getExplorerUrl(chainId);
+  const networkConfig = getAddresses();
+  const tokenLockerAddress = networkConfig.tokenLocker;
+  const explorerUrl = getExplorerUrl();
 
   // Form State
-  const [tokenAddressInput, setTokenAddressInput] = useState<string>(mockTokenAddress);
+  const [tokenAddressInput, setTokenAddressInput] = useState<string>('');
   const [amountInput, setAmountInput] = useState<string>('100');
   const [titleInput, setTitleInput] = useState<string>('Project Reserve Lock');
   const [durationPreset, setDurationPreset] = useState<number>(30); // days
@@ -53,8 +50,8 @@ export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet 
     balance: bigint;
     allowance: bigint;
   }>({
-    symbol: 'TEST',
-    name: 'Test Token',
+    symbol: 'TOKEN',
+    name: 'ERC-20 Token',
     decimals: 18,
     balance: 0n,
     allowance: 0n,
@@ -243,19 +240,15 @@ export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet 
                   </span>
                 )}
               </label>
-              <button
-                type="button"
-                onClick={() => setTokenAddressInput(mockTokenAddress)}
-                className="text-xs text-[#00f2fe] hover:underline flex items-center gap-1 font-medium"
-              >
-                Use TEST Token
-              </button>
+              <span className="text-xs text-[var(--text-muted)]">
+                BOT Chain Mainnet ERC-20
+              </span>
             </div>
 
             <div className="relative">
               <input
                 type="text"
-                placeholder="0x..."
+                placeholder="0x... (Enter ERC-20 token address on BOT Chain)"
                 value={tokenAddressInput}
                 onChange={(e) => setTokenAddressInput(e.target.value.trim())}
                 className="glass-input font-mono text-sm pr-24"
@@ -333,7 +326,7 @@ export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet 
             {hasInsufficientBalance && (
               <p className="mt-2 text-xs text-rose-400 flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" />
-                <span>Insufficient balance. Get TEST tokens from the faucet or reduce amount.</span>
+                <span>Insufficient token balance in your connected wallet.</span>
               </p>
             )}
           </div>

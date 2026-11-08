@@ -1,23 +1,20 @@
 import React from 'react';
 import { useAccount, useChainId, useSwitchChain } from 'wagmi';
-import { Lock, ShieldCheck, Coins, ExternalLink, RefreshCw } from 'lucide-react';
-import { botChainMainnet, botChainTestnet, getExplorerUrl } from '../config/wagmi';
+import { Lock, ExternalLink, RefreshCw } from 'lucide-react';
+import { botChainMainnet, getExplorerUrl } from '../config/wagmi';
 
 interface NavbarProps {
   activeTab: 'create' | 'my-locks' | 'verify';
   setActiveTab: (tab: 'create' | 'my-locks' | 'verify') => void;
-  onOpenFaucet: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenFaucet }) => {
+export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const { isConnected } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
 
   const isMainnet = chainId === botChainMainnet.id;
-  const isTestnet = chainId === botChainTestnet.id;
-  const isCorrectChain = isMainnet || isTestnet;
-  const explorerUrl = getExplorerUrl(chainId);
+  const explorerUrl = getExplorerUrl();
 
   return (
     <header className="w-full border-b border-[var(--border-subtle)] bg-[rgba(7,9,14,0.8)] backdrop-blur-md sticky top-0 z-50">
@@ -38,8 +35,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenF
               <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
                 TokenLocker
               </span>
-              <span className={`badge ${isTestnet ? 'badge-unlocked' : 'badge-locked'} text-[10px] py-0.5 px-2`}>
-                {isTestnet ? 'TESTNET (968)' : 'MAINNET (677)'}
+              <span className="badge badge-locked text-[10px] py-0.5 px-2">
+                MAINNET (677)
               </span>
             </div>
             <p className="text-[11px] text-[var(--text-muted)] font-medium">
@@ -85,20 +82,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenF
         {/* Action Controls */}
         <div className="flex items-center gap-3">
           
-          {/* Testnet Faucet Button (Only shown on testnet or when disconnected) */}
-          {(!isConnected || isTestnet) && (
-            <button
-              onClick={onOpenFaucet}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-[#8a2be2]/10 hover:bg-[#8a2be2]/20 text-[#c084fc] border border-[#8a2be2]/30 transition-all"
-              title="Mint 1,000 Free TEST Tokens for Lock Testing (Testnet Only)"
-            >
-              <Coins className="w-3.5 h-3.5" />
-              <span>TEST Faucet</span>
-            </button>
-          )}
-
           {/* Network Switcher (if on unsupported chain) */}
-          {isConnected && !isCorrectChain && (
+          {isConnected && !isMainnet && (
             <button
               onClick={() => switchChain?.({ chainId: botChainMainnet.id })}
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 transition-all"
@@ -108,10 +93,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenF
             </button>
           )}
 
-          {isConnected && isCorrectChain && (
+          {isConnected && isMainnet && (
             <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-[#10b981]/10 text-[#34d399] border border-[#10b981]/25">
               <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
-              <span>{isMainnet ? 'Mainnet (677)' : 'Testnet (968)'}</span>
+              <span>BOT Chain Mainnet</span>
             </div>
           )}
 
@@ -127,7 +112,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenF
             target="_blank"
             rel="noopener noreferrer"
             className="p-2.5 rounded-xl text-[var(--text-secondary)] hover:text-white bg-[rgba(255,255,255,0.03)] border border-[var(--border-subtle)] hover:bg-[rgba(255,255,255,0.08)] transition-all"
-            title={`Open Explorer (${explorerUrl})`}
+            title={`Open BotChain Explorer (${explorerUrl})`}
           >
             <ExternalLink className="w-4 h-4" />
           </a>

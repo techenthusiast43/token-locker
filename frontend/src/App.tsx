@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { WagmiProvider, useAccount, useChainId, usePublicClient } from 'wagmi';
+import { WagmiProvider, useAccount, usePublicClient } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { config, botChainMainnet, botChainTestnet, getExplorerUrl } from './config/wagmi';
+import { config, botChainMainnet, getExplorerUrl } from './config/wagmi';
 import { Navbar } from './components/Navbar';
 import { LockForm } from './components/LockForm';
 import { MyLocks } from './components/MyLocks';
 import { VerifyLock } from './components/VerifyLock';
-import { FaucetModal } from './components/FaucetModal';
 import { TOKEN_LOCKER_ABI } from './contracts/abis';
 import { getAddresses } from './contracts/addresses';
 import {
@@ -15,34 +14,27 @@ import {
   Coins,
   ExternalLink,
   Layers,
-  Sparkles,
-  CheckCircle2,
-  AlertCircle,
 } from 'lucide-react';
 
 const queryClient = new QueryClient();
 
 function MainContent() {
   const [activeTab, setActiveTab] = useState<'create' | 'my-locks' | 'verify'>('create');
-  const [isFaucetOpen, setIsFaucetOpen] = useState(false);
   const [selectedVerifyId, setSelectedVerifyId] = useState<bigint | null>(null);
   const [totalLocksCount, setTotalLocksCount] = useState<number>(0);
 
   const { address: userAddress, isConnected } = useAccount();
-  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const networkConfig = getAddresses(chainId);
-  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
-  const isTestnet = chainId === botChainTestnet.id;
-  const explorerUrl = getExplorerUrl(chainId);
-  const explorerName = isTestnet ? 'BohrScan Explorer' : 'BotChain Explorer';
-  const rpcUrl = isTestnet ? 'https://rpc.bohr.life' : 'https://rpc.botchain.ai';
+  const networkConfig = getAddresses();
+  const tokenLockerAddress = networkConfig.tokenLocker;
+  const explorerUrl = getExplorerUrl();
+  const rpcUrl = networkConfig.rpc;
 
   // Fetch total locks count
   useEffect(() => {
     const fetchStats = async () => {
-      if (!publicClient || !tokenLockerAddress || tokenLockerAddress === '0x0000000000000000000000000000000000000000') return;
+      if (!publicClient || !tokenLockerAddress) return;
       try {
         const count = await publicClient.readContract({
           address: tokenLockerAddress,
@@ -71,7 +63,6 @@ function MainContent() {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenFaucet={() => setIsFaucetOpen(true)}
       />
 
       {/* Main Container */}
@@ -124,7 +115,6 @@ function MainContent() {
         {activeTab === 'create' && (
           <LockForm
             onLockCreated={(id) => handleOpenVerify(id)}
-            onOpenFaucet={() => setIsFaucetOpen(true)}
           />
         )}
 
@@ -140,21 +130,13 @@ function MainContent() {
         )}
       </main>
 
-      {/* Testnet Faucet Modal (Only applicable on Testnet) */}
-      <FaucetModal
-        isOpen={isFaucetOpen}
-        onClose={() => setIsFaucetOpen(false)}
-      />
-
       {/* Footer */}
       <footer className="w-full border-t border-[var(--border-subtle)] bg-[rgba(5,7,12,0.9)] py-8 px-4 text-xs text-slate-400 mt-12">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-bold text-white">TokenLocker dApp</span>
             <span className="text-[var(--text-muted)]">•</span>
-            <span>
-              Running on {isTestnet ? 'BOT Chain Testnet (Chain ID 968)' : 'BOT Chain Mainnet (Chain ID 677)'}
-            </span>
+            <span>Running on BOT Chain Mainnet (Chain ID 677)</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -164,7 +146,7 @@ function MainContent() {
               rel="noopener noreferrer"
               className="hover:text-white transition-colors"
             >
-              RPC Endpoint
+              RPC: https://rpc.botchain.ai
             </a>
             <a
               href={explorerUrl}
@@ -172,17 +154,9 @@ function MainContent() {
               rel="noopener noreferrer"
               className="hover:text-white transition-colors flex items-center gap-1"
             >
-              <span>{explorerName}</span>
+              <span>BotChain Explorer</span>
               <ExternalLink className="w-3 h-3" />
             </a>
-            {isTestnet && (
-              <button
-                onClick={() => setIsFaucetOpen(true)}
-                className="text-[#00f2fe] hover:underline font-medium"
-              >
-                Test Token Faucet
-              </button>
-            )}
           </div>
         </div>
       </footer>

@@ -2,11 +2,7 @@
   "network": "botChainMainnet",
   "chainId": 677,
   "tokenLocker": "0xcA7110690a29728998034f833eAFa5341D98bD5f",
-  "mockToken": "",
   "deployedAt": "2026-11-08T07:10:10.147Z",
-  "testnet": {
-    "chainId": 968,
-    "tokenLocker": "0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52",
-    "mockToken": "0xBb6987f6981B31BE9e76829A6eBCa743634b8094"
-  }
+  "rpc": "https://rpc.botchain.ai",
+  "explorer": "https://scan.botchain.ai"
 }
