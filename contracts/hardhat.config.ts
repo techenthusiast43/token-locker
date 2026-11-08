@@ -23,8 +23,13 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: 31337,
     },
+    botChainMainnet: {
+      url: process.env.BOTCHAIN_MAINNET_RPC || "https://rpc.botchain.ai",
+      chainId: 677,
+      accounts: [PRIVATE_KEY],
+    },
     botChainTestnet: {
-      url: "https://rpc.bohr.life",
+      url: process.env.BOTCHAIN_RPC_URL || "https://rpc.bohr.life",
       chainId: 968,
       accounts: [PRIVATE_KEY],
     },
@@ -37,9 +42,18 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
+      botChainMainnet: "abc",
       botChainTestnet: "abc",
     },
     customChains: [
+      {
+        network: "botChainMainnet",
+        chainId: 677,
+        urls: {
+          apiURL: "https://scan.botchain.ai/api",
+          browserURL: "https://scan.botchain.ai",
+        },
+      },
       {
         network: "botChainTestnet",
         chainId: 968,

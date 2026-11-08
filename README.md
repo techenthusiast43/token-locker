@@ -6,18 +6,22 @@ TokenLocker allows token holders, founders, and developers to lock tokens for a 
 
 ---
 
-## 📜 Deployed Contracts (BOT Chain Testnet)
+## 🌐 Network Configurations
 
-| Contract | Address | BohrScan Explorer |
-| :--- | :--- | :--- |
-| **TokenLocker** | `0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52` | [View Contract](https://scan.bohr.life/address/0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52) |
-| **MockERC20 (TEST)** | `0xBb6987f6981B31BE9e76829A6eBCa743634b8094` | [View Token](https://scan.bohr.life/address/0xBb6987f6981B31BE9e76829A6eBCa743634b8094) |
+### 1. BOT Chain Mainnet
+- **Chain ID:** `677`
+- **RPC Endpoint:** `https://rpc.botchain.ai`
+- **Native Gas Token:** BOT
+- **Total Supply:** 150,000,000 BOT
+- **Block Explorer:** [https://scan.botchain.ai](https://scan.botchain.ai)
 
-- **Network:** BOT Chain Testnet
+### 2. BOT Chain Testnet
 - **Chain ID:** `968`
 - **RPC Endpoint:** `https://rpc.bohr.life`
-- **Block Explorer:** [https://scan.bohr.life/](https://scan.bohr.life/)
 - **Native Gas Token:** BOT
+- **Block Explorer:** [https://scan.bohr.life](https://scan.bohr.life)
+- **TokenLocker Contract:** [`0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52`](https://scan.bohr.life/address/0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52)
+- **MockERC20 (TEST):** [`0xBb6987f6981B31BE9e76829A6eBCa743634b8094`](https://scan.bohr.life/address/0xBb6987f6981B31BE9e76829A6eBCa743634b8094)
 
 ---
 
@@ -82,6 +86,9 @@ npm test
 
 # Deploy to BOT Chain Testnet
 npm run deploy:botchain
+
+# Deploy to BOT Chain Mainnet
+npm run deploy:mainnet
 ```
 
 ### 2. Frontend dApp

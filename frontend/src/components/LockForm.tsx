@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   useAccount,
+  useChainId,
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
@@ -19,7 +20,8 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { TOKEN_LOCKER_ABI, ERC20_ABI } from '../contracts/abis';
-import addresses from '../contracts/addresses.json';
+import { getAddresses } from '../contracts/addresses';
+import { getExplorerUrl, botChainTestnet } from '../config/wagmi';
 
 interface LockFormProps {
   onLockCreated?: (lockId: bigint) => void;
@@ -28,10 +30,13 @@ interface LockFormProps {
 
 export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet }) => {
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const tokenLockerAddress = (addresses.tokenLocker || '0x5FbDB2315678afecb367f032d93F642f64180aa3') as `0x${string}`;
-  const mockTokenAddress = (addresses.mockToken || '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512') as `0x${string}`;
+  const networkConfig = getAddresses(chainId);
+  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
+  const mockTokenAddress = networkConfig.mockToken || '';
+  const explorerUrl = getExplorerUrl(chainId);
 
   // Form State
   const [tokenAddressInput, setTokenAddressInput] = useState<string>(mockTokenAddress);
@@ -486,12 +491,12 @@ export const LockForm: React.FC<LockFormProps> = ({ onLockCreated, onOpenFaucet 
                 </p>
                 {lockHash && (
                   <a
-                    href={`https://scan.bohr.life/tx/${lockHash}`}
+                    href={`${explorerUrl}/tx/${lockHash}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-2 text-xs font-semibold text-[#00f2fe] underline"
                   >
-                    View on BohrScan Explorer &rarr;
+                    View on Explorer &rarr;
                   </a>
                 )}
               </div>

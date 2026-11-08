@@ -6,7 +6,8 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
-    "deploy:botchain": "hardhat run scripts/deploy.ts --network botChainTestnet"
+    "deploy:botchain": "hardhat run scripts/deploy.ts --network botChainTestnet",
+    "deploy:mainnet": "hardhat run scripts/deploy-mainnet.ts --network botChainMainnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",

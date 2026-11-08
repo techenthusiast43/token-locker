@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { WagmiProvider, useAccount, usePublicClient } from 'wagmi';
+import { WagmiProvider, useAccount, useChainId, usePublicClient } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { config, botChainTestnet } from './config/wagmi';
+import { config, botChainMainnet, botChainTestnet, getExplorerUrl } from './config/wagmi';
 import { Navbar } from './components/Navbar';
 import { LockForm } from './components/LockForm';
 import { MyLocks } from './components/MyLocks';
 import { VerifyLock } from './components/VerifyLock';
 import { FaucetModal } from './components/FaucetModal';
 import { TOKEN_LOCKER_ABI } from './contracts/abis';
-import addresses from './contracts/addresses.json';
+import { getAddresses } from './contracts/addresses';
 import {
   Lock,
   ShieldCheck,
@@ -29,13 +29,20 @@ function MainContent() {
   const [totalLocksCount, setTotalLocksCount] = useState<number>(0);
 
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
-  const tokenLockerAddress = (addresses.tokenLocker || '0x5FbDB2315678afecb367f032d93F642f64180aa3') as `0x${string}`;
+
+  const networkConfig = getAddresses(chainId);
+  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
+  const isTestnet = chainId === botChainTestnet.id;
+  const explorerUrl = getExplorerUrl(chainId);
+  const explorerName = isTestnet ? 'BohrScan Explorer' : 'BotChain Explorer';
+  const rpcUrl = isTestnet ? 'https://rpc.bohr.life' : 'https://rpc.botchain.ai';
 
   // Fetch total locks count
   useEffect(() => {
     const fetchStats = async () => {
-      if (!publicClient) return;
+      if (!publicClient || !tokenLockerAddress || tokenLockerAddress === '0x0000000000000000000000000000000000000000') return;
       try {
         const count = await publicClient.readContract({
           address: tokenLockerAddress,
@@ -133,7 +140,7 @@ function MainContent() {
         )}
       </main>
 
-      {/* Testnet Faucet Modal */}
+      {/* Testnet Faucet Modal (Only applicable on Testnet) */}
       <FaucetModal
         isOpen={isFaucetOpen}
         onClose={() => setIsFaucetOpen(false)}
@@ -145,12 +152,14 @@ function MainContent() {
           <div className="flex items-center gap-2">
             <span className="font-bold text-white">TokenLocker dApp</span>
             <span className="text-[var(--text-muted)]">•</span>
-            <span>Running on BOT Chain Testnet (Chain ID 968)</span>
+            <span>
+              Running on {isTestnet ? 'BOT Chain Testnet (Chain ID 968)' : 'BOT Chain Mainnet (Chain ID 677)'}
+            </span>
           </div>
 
           <div className="flex items-center gap-6">
             <a
-              href="https://rpc.bohr.life"
+              href={rpcUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors"
@@ -158,20 +167,22 @@ function MainContent() {
               RPC Endpoint
             </a>
             <a
-              href="https://scan.bohr.life/"
+              href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors flex items-center gap-1"
             >
-              <span>BohrScan Explorer</span>
+              <span>{explorerName}</span>
               <ExternalLink className="w-3 h-3" />
             </a>
-            <button
-              onClick={() => setIsFaucetOpen(true)}
-              className="text-[#00f2fe] hover:underline font-medium"
-            >
-              Test Token Faucet
-            </button>
+            {isTestnet && (
+              <button
+                onClick={() => setIsFaucetOpen(true)}
+                className="text-[#00f2fe] hover:underline font-medium"
+              >
+                Test Token Faucet
+              </button>
+            )}
           </div>
         </div>
       </footer>

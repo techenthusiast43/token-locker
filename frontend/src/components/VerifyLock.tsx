@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePublicClient } from 'wagmi';
+import { usePublicClient, useChainId } from 'wagmi';
 import { formatUnits, isAddress } from 'viem';
 import {
   ShieldCheck,
@@ -17,7 +17,8 @@ import {
   Share2,
 } from 'lucide-react';
 import { TOKEN_LOCKER_ABI, ERC20_ABI } from '../contracts/abis';
-import addresses from '../contracts/addresses.json';
+import { getAddresses } from '../contracts/addresses';
+import { getExplorerUrl, botChainTestnet } from '../config/wagmi';
 import { LockRecord } from '../types';
 
 interface VerifyLockProps {
@@ -26,7 +27,12 @@ interface VerifyLockProps {
 
 export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
   const publicClient = usePublicClient();
-  const tokenLockerAddress = (addresses.tokenLocker || '0x5FbDB2315678afecb367f032d93F642f64180aa3') as `0x${string}`;
+  const chainId = useChainId();
+
+  const networkConfig = getAddresses(chainId);
+  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
+  const explorerUrl = getExplorerUrl(chainId);
+  const explorerName = chainId === botChainTestnet.id ? 'BohrScan' : 'BotChain Explorer';
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedLock, setSelectedLock] = useState<LockRecord | null>(null);
@@ -249,7 +255,7 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
             <p className="text-[11px] text-slate-400 mt-1">
               Guaranteed held in custody by contract{' '}
               <a
-                href={`https://scan.bohr.life/address/${tokenLockerAddress}`}
+                href={`${explorerUrl}/address/${tokenLockerAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-[#00f2fe] underline"
@@ -266,7 +272,7 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
               <div className="font-mono text-white text-xs break-all flex items-center justify-between">
                 <span>{selectedLock.owner}</span>
                 <a
-                  href={`https://scan.bohr.life/address/${selectedLock.owner}`}
+                  href={`${explorerUrl}/address/${selectedLock.owner}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#00f2fe] hover:text-white ml-2"
@@ -281,7 +287,7 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
               <div className="font-mono text-white text-xs break-all flex items-center justify-between">
                 <span>{selectedLock.token}</span>
                 <a
-                  href={`https://scan.bohr.life/address/${selectedLock.token}`}
+                  href={`${explorerUrl}/address/${selectedLock.token}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#00f2fe] hover:text-white ml-2"
@@ -348,13 +354,13 @@ export const VerifyLock: React.FC<VerifyLockProps> = ({ initialLockId }) => {
             </button>
 
             <a
-              href={`https://scan.bohr.life/address/${tokenLockerAddress}`}
+              href={`${explorerUrl}/address/${tokenLockerAddress}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary w-full sm:flex-1 py-3 text-xs font-semibold"
             >
               <ExternalLink className="w-4 h-4" />
-              <span>Inspect on BohrScan</span>
+              <span>Inspect on {explorerName}</span>
             </a>
           </div>
         </div>

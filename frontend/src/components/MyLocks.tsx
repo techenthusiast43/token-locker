@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   useAccount,
+  useChainId,
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
@@ -22,7 +23,8 @@ import {
   Check,
 } from 'lucide-react';
 import { TOKEN_LOCKER_ABI, ERC20_ABI } from '../contracts/abis';
-import addresses from '../contracts/addresses.json';
+import { getAddresses } from '../contracts/addresses';
+import { getExplorerUrl } from '../config/wagmi';
 import { LockRecord } from '../types';
 
 interface MyLocksProps {
@@ -32,9 +34,12 @@ interface MyLocksProps {
 
 export const MyLocks: React.FC<MyLocksProps> = ({ onNavigateToCreate, onOpenVerify }) => {
   const { address: userAddress, isConnected } = useAccount();
+  const chainId = useChainId();
   const publicClient = usePublicClient();
 
-  const tokenLockerAddress = (addresses.tokenLocker || '0x5FbDB2315678afecb367f032d93F642f64180aa3') as `0x${string}`;
+  const networkConfig = getAddresses(chainId);
+  const tokenLockerAddress = networkConfig.tokenLocker || '0x5Ed2E76ef698cAdf1905C5FD8de89a4dA786ae52';
+  const explorerUrl = getExplorerUrl(chainId);
 
   const [locks, setLocks] = useState<LockRecord[]>([]);
   const [tokenMeta, setTokenMeta] = useState<Record<string, { symbol: string; decimals: number }>>({});
@@ -353,7 +358,7 @@ export const MyLocks: React.FC<MyLocksProps> = ({ onNavigateToCreate, onOpenVeri
                     <div className="flex items-center justify-between">
                       <span>Token Contract:</span>
                       <a
-                        href={`https://scan.bohr.life/address/${lock.token}`}
+                        href={`${explorerUrl}/address/${lock.token}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-mono text-[#00f2fe] hover:underline flex items-center gap-1"

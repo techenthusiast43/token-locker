@@ -2,7 +2,30 @@ import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { defineChain } from 'viem';
 
-// Define BOT Chain Testnet
+// Define BOT Chain Mainnet (Chain ID: 677)
+export const botChainMainnet = defineChain({
+  id: 677,
+  name: 'BOT Chain Mainnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'BOT',
+    symbol: 'BOT',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.botchain.ai'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'BotChain Explorer',
+      url: 'https://scan.botchain.ai',
+    },
+  },
+  testnet: false,
+});
+
+// Define BOT Chain Testnet (Chain ID: 968)
 export const botChainTestnet = defineChain({
   id: 968,
   name: 'BOT Chain Testnet',
@@ -42,10 +65,16 @@ export const hardhatLocal = defineChain({
   testnet: true,
 });
 
-// Reown / WalletConnect Project ID (can be configured in .env or defaults to a working demo key)
-export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || '8e6b5ffdcbc9794bc2c96d3bc9b107de';
+// Explorer helper
+export const getExplorerUrl = (chainId?: number) => {
+  if (chainId === 968) return 'https://scan.bohr.life';
+  return 'https://scan.botchain.ai';
+};
 
-export const networks = [botChainTestnet, hardhatLocal];
+// Reown / WalletConnect Project ID (can be configured in .env or defaults to a working demo key)
+export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || '39aa70f889eb69efc6ea7cd8c6488fff';
+
+export const networks = [botChainMainnet, botChainTestnet, hardhatLocal];
 
 // Create Wagmi Adapter
 export const wagmiAdapter = new WagmiAdapter({
@@ -56,14 +85,14 @@ export const wagmiAdapter = new WagmiAdapter({
 // Initialize Reown AppKit Modal
 export const modal = createAppKit({
   adapters: [wagmiAdapter],
-  networks: [botChainTestnet, hardhatLocal],
-  defaultNetwork: botChainTestnet,
+  networks: [botChainMainnet, botChainTestnet, hardhatLocal],
+  defaultNetwork: botChainMainnet,
   projectId,
   metadata: {
     name: 'TokenLocker dApp',
-    description: 'Decentralized Trustless Token Locking on BOT Chain',
-    url: 'https://locker.bohr.life',
-    icons: ['https://scan.bohr.life/favicon.ico'],
+    description: 'Decentralized Trustless Token Locking on BOT Chain Mainnet',
+    url: 'https://scan.botchain.ai',
+    icons: ['https://scan.botchain.ai/favicon.ico'],
   },
   features: {
     analytics: false,
